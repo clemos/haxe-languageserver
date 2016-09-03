@@ -13,10 +13,10 @@ class FindReferencesFeature {
         context.protocol.onFindReferences = onFindReferences;
     }
 
-    function onFindReferences(params:TextDocumentPositionParams, token:CancellationToken, resolve:Array<Location>->Void, reject:ResponseError<NoData>->Void) {
+    public function findReferences(command:String, params:TextDocumentPositionParams, token:CancellationToken, resolve:Array<Location>->Void, reject:ResponseError<NoData>->Void) {
         var doc = context.documents.get(params.textDocument.uri);
         var bytePos = doc.byteOffsetAt(params.position);
-        var args = ["--display", '${doc.fsPath}@$bytePos@usage'];
+        var args = ["--display", '${doc.fsPath}@$bytePos@$command'];
         context.callDisplay(args, doc.content, token, function(data) {
             if (token.canceled)
                 return;
@@ -41,5 +41,9 @@ class FindReferencesFeature {
 
             return resolve(results);
         }, function(error) reject(ResponseError.internalError(error)));
+    }
+
+    function onFindReferences(params:TextDocumentPositionParams, token:CancellationToken, resolve:Array<Location>->Void, reject:ResponseError<NoData>->Void) {
+        findReferences("usage", params, token, resolve, reject);
     }
 }

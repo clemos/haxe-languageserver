@@ -44,6 +44,7 @@ class Context {
     public var haxeServer(default,null):HaxeServer;
     public var documents(default,null):TextDocuments;
     var diagnostics:DiagnosticsManager;
+    public var findReferences:FindReferencesFeature;
 
     public var config(default, null):Config;
     @:allow(haxeLanguageServer.HaxeServer)
@@ -85,7 +86,8 @@ class Context {
                 codeActionProvider: true,
                 codeLensProvider: {
                     resolveProvider: true
-                }
+                },
+                renameProvider: true
             }
         });
     }
@@ -113,7 +115,8 @@ class Context {
                 new HoverFeature(this);
                 new SignatureHelpFeature(this);
                 new GotoDefinitionFeature(this);
-                new FindReferencesFeature(this);
+                findReferences = new FindReferencesFeature(this);
+                new RenameFeature(this);
                 new DocumentSymbolsFeature(this);
                 new CalculatePackageFeature(this);
 
