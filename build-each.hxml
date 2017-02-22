@@ -2,4 +2,5 @@
 -cp src
 -dce full
 -lib hxnodejs
+-lib npm-haxe-externs
 -D hxnodejs-no-version-warning

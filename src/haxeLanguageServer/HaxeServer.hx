@@ -8,6 +8,7 @@ import js.node.Buffer;
 import js.node.ChildProcess;
 import js.node.stream.Readable;
 import jsonrpc.CancellationToken;
+import js.npm.Haxe;
 
 enum DisplayResult {
     DCancelled;
@@ -165,8 +166,8 @@ class HaxeServer {
         buffer = new MessageBuffer();
         nextMessageLength = -1;
 
-        proc = ChildProcess.spawn(context.displayServerConfig.haxePath, context.displayServerConfig.arguments.concat(["--wait", "stdio"]), {env: env});
-
+        proc = Haxe.haxe.spawn("--wait", "stdio"); 
+        
         proc.stdout.on(ReadableEvent.Data, function(buf:Buffer) {
             context.sendLogMessage(Log, reTrailingNewline.replace(buf.toString(), ""));
         });
